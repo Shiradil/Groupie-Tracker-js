@@ -1,29 +1,32 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-
 const app = express();
 const port = 3000;
 
-app.use(express.static('static'));
+const dbClient = require('./db/dbconnection');
+const loginHandler = require('./handlers/loginHandler');
+const registerHandler = require('./handlers/registerHandler');
 
-
-app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {
-    res.redirect('/login');
+    res.render('index');
 });
 
-app.get('/login', (req, res) => {
-    res.render('login');
-});
+app.get('/login', loginHandler.getLoginPage);
+app.post('/login', loginHandler.handleLogin);
 
-app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    res.redirect('/dashboard');
-});
+app.get('/register', registerHandler.getRegistrationPage);
+app.post('/register', registerHandler.handleRegistration);
 
-app.listen(port, () => {
-    console.log(`Server is listening at http://localhost:${port}`);
+dbClient.connect(err => {
+    if (err) {
+        console.error("Error connecting to MongoDB Atlas:", err);
+        return;
+    }
+    console.log("Connected to MongoDB Atlas");
+
+    app.listen(port, () => {
+        console.log(`Server is listening at http://localhost:${port}`);
+    });
 });
