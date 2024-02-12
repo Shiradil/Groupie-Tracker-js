@@ -1,4 +1,4 @@
-const dbClient = require('../db/dbconnection');
+const User = require('../models/User');
 
 exports.getRegistrationPage = (req, res) => {
     res.render('registration');
@@ -8,21 +8,18 @@ exports.handleRegistration = async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const db = dbClient.db(dbName);
-        const collection = db.collection('users');
-
-        const existingUser = await collection.findOne({ username });
+        const existingUser = await User.findOne({ username });
         if (existingUser) {
-            res.status(409).send('Username already exists');
-            return;
+            return res.status(409).send('Username already exists');
         }
 
-        const newUser = { username, password };
-        await collection.insertOne(newUser);
+        const newUser = new User({ username, password });
+        await newUser.save();
 
-        res.redirect('/login');
+        res.redirect('/login?registered=true');
     } catch (error) {
         console.error('Error handling registration:', error);
         res.status(500).send('Internal Server Error');
     }
 };
+

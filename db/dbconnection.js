@@ -1,16 +1,9 @@
-const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose');
 
-const uri = "mongodb+srv://shirbaev04:bauka@cluster0.xttjkma.mongodb.net/";
-const dbName = "weatherwebsite";
+const uri = "mongodb+srv://shirbaev04:bauka@cluster0.xttjkma.mongodb.net/weatherwebsite";
 
-const client = new MongoClient(uri);
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connected to MongoDB Atlas'))
+    .catch(err => console.error('Error connecting to MongoDB Atlas:', err));
 
-client.connect(err => {
-    if (err) {
-        console.error("Error connecting to MongoDB Atlas:", err);
-        return;
-    }
-    console.log("Connected to MongoDB Atlas");
-});
-
-module.exports = client;
+module.exports = mongoose.connection;

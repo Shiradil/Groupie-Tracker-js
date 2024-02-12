@@ -1,19 +1,18 @@
-const dbClient = require('../db/dbconnection');
+const User = require('../models/User');
 
 exports.getLoginPage = (req, res) => {
-    res.render('login');
+    res.render('login', { registered: req.query.registered }); 
 };
 
 exports.handleLogin = async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const db = dbClient.db('weatherwebsite');
-        const collection = db.collection('users');
-        const user = await collection.findOne({ username, password });
+        const user = await User.findOne({ username, password });
 
         if (user) {
-            res.redirect('/dashboard');
+            req.session.user = { username };
+            res.redirect('/weatherpage');
         } else {
             res.render('login', { error: 'Invalid username or password' });
         }

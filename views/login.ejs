@@ -7,6 +7,16 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+    <% if (typeof registered !== 'undefined' && registered === 'true') { %>
+        <div class="alert alert-success" role="alert">
+            User successfully registered! Now you can login in
+        </div>
+    <% } %>
+    <% if (typeof error !== 'undefined' && error === 'Invalid username or password') { %>
+        <div class="alert alert-danger" role="alert">
+            incorrect username or password
+        </div>
+    <% } %>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">

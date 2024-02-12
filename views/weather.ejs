@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Weather App</h1>
+        <form id="weatherForm" class="mb-4">
+            <div class="input-group">
+                <input type="text" id="cityInput" class="form-control" placeholder="Enter city name" required>
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Get Weather</button>
+                </div>
+            </div>
+        </form>
+        <div id="weatherResult">
+            <h2>Weather Information</h2>
+            <h3>City: <%= name %></h3>
+            <p>Temperature: <%= temperature %>°C</p>
+            <p>Description: <%= description %></p>
+            <p>Weather icon:</p>
+            <img src="https://openweathermap.org/img/wn/<%= icon %>@2x.png" alt="weather icon">
+            <p>Feels Like: <%= feelsLike %>C</p>
+            <p>Humidity: <%= humidity %>%</p>
+            <p>Pressure: <%= pressure %> hPa</p>
+            <p>Wind Speed: <%= windSpeed %> m/s</p>
+            <p>Country Code: <%= countryCode %></p>
+            <p>Rain Volume (last 3 hours): <%= rainVolumeLast3Hours %> mm</p>
+            <p>Interesting point: <%= pointsOfInterest %></p>
+            <p>Current dollar: <%= exchange %>KZT</p>
+        </div>       
+         <div id="map"  style="height: 300px;width: 100%; border-radius: 10px; margin-top: 35px;"></div>
+    </div>
+    <footer class="mt-5 text-center">
+        <p>Created by Shirbaev Adilzhan, Group SE-2204</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const weatherForm = document.getElementById('weatherForm');
+        const cityInput = document.getElementById('cityInput');
+
+        weatherForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const city = cityInput.value;
+
+            const url = `/weatherpage?city=${encodeURIComponent(city)}`;
+
+            window.location.href = url;
+        });
+
+    </script>
+</body>
+</html>
