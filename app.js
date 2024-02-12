@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const WeatherData = require('./models/WeatherData');
 const ExchangeData = require('./models/ExchangeData');
+const User = require('./models/User');
 const crypto = require('crypto')
 const { getWeather, getPointsOfInterest, getExchangeRates, getChuckNorrisJoke } = require("./apidata");
 const port = 3001;
@@ -13,6 +14,7 @@ const dbConnection = require('./db/dbconnection');
 const loginHandler = require('./handlers/loginHandler');
 const registerHandler = require('./handlers/registerHandler');
 const JokeData = require('./models/ChuckNoriesJokes');
+const addUserHandler = require('./handlers/addUserHandler')
 
 const secretKey = crypto.randomBytes(64).toString('hex');
 app.use(session({
@@ -184,7 +186,7 @@ app.get('/history', async (req, res) => {
             const userWeatherData = await WeatherData.find({ user: req.session.user._id });
             const userExchangeData = await ExchangeData.find({ user: req.session.user._id });
             const userJokesData = await JokeData.find({ user: req.session.user._id });
-            
+
             res.render('history', { userWeatherData, userExchangeData, userJokesData });
         } catch (error) {
             console.error(error);
@@ -216,6 +218,63 @@ app.get('/logout', (req, res) => {
         }
     });
 });
+
+app.get('/admin', async (req, res) => {
+    if (req.session.user && req.session.user.isAdmin) {
+        try {
+            const users = await User.find({});
+            res.render('admin', { users });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Error fetching users');
+        }
+    } else {
+        res.redirect('/login'); 
+    }
+});
+
+app.post('/admin/add', addUserHandler.handleAddUser);
+
+app.post('/admin/update/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    const { username, password } = req.body;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        user.username = username;
+        user.password = password;
+        await user.save();
+
+        res.redirect('/admin');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error updating user');
+    }
+});
+
+app.post('/admin/delete/:userId', async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        await User.deleteOne({ _id: userId });
+
+        res.redirect('/admin');
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).send('Error deleting user');
+    }
+});
+
+
 
 app.get('/login', loginHandler.getLoginPage);
 app.post('/login', loginHandler.handleLogin);
