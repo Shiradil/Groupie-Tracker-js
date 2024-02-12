@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
+        
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="/">Weather App</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,8 +17,14 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="/weatherpage">Weather</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/exchange-pg">Exchange</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/chuckNorrisJokes" class="nav-link">Random Chuck Norris Joke</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/history">History</a>
@@ -28,6 +35,7 @@
             </ul>
         </div>
     </nav>
+
 
     <div class="container mt-5">
         <h1 class="mb-4">Weather App</h1>
@@ -79,7 +87,20 @@
 
             window.location.href = url;
         });
+        function initMap(latitude, longitude) {
+            var map = L.map('map').setView([latitude, longitude], 13);
 
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            L.marker([latitude, longitude]).addTo(map)
+                .bindPopup('Weather Location')
+                .openPopup();
+        }
+        <% if (coordinates && coordinates.latitude && coordinates.longitude) { %>
+            initMap(<%= coordinates.latitude %>, <%= coordinates.longitude %>);
+        <% } %>
     </script>
 </body>
 </html>

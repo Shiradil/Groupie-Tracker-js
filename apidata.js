@@ -1,5 +1,25 @@
 const http = require("http");
 
+function getChuckNorrisJoke() {
+    return new Promise((resolve, reject) => {
+        const url = `https://api.chucknorris.io/jokes/random`;
+
+        https.get(url, (response) => {
+            let data = "";
+            response.on("data", (chunk) => {
+                data += chunk;
+            });
+
+            response.on("end", () => {
+                const jokeData = JSON.parse(data);
+                resolve(jokeData);
+            });
+        }).on("error", (error) => {
+            reject(error);
+        });
+    });
+}
+
 function getWeather(city) {
     return new Promise((resolve, reject) => {
         const apiKey = "5291eefa398029c38b952d4a10671a3e";
@@ -68,6 +88,6 @@ function getExchangeRates() {
     });
 }
 
-module.exports = { getWeather, getCoordinates, getPointsOfInterest, getExchangeRates };
+module.exports = { getWeather, getCoordinates, getPointsOfInterest, getExchangeRates, getChuckNorrisJoke };
 
 
