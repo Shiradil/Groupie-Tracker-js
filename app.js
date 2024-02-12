@@ -7,7 +7,7 @@ const ExchangeData = require('./models/ExchangeData');
 const User = require('./models/User');
 const crypto = require('crypto')
 const { getWeather, getPointsOfInterest, getExchangeRates, getChuckNorrisJoke } = require("./apidata");
-const port = 3001;
+const port = 3000;
 
 const dbConnection = require('./db/dbconnection');
 
