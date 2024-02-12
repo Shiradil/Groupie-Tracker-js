@@ -11,8 +11,8 @@ exports.handleLogin = async (req, res) => {
         const user = await User.findOne({ username, password });
 
         if (user) {
-            req.session.user = { username };
-            res.redirect('/weatherpage');
+            req.session.user = { _id: user._id, username: username };
+            res.redirect('/weather');
         } else {
             res.render('login', { error: 'Invalid username or password' });
         }

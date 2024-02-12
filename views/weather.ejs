@@ -8,6 +8,27 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">Weather App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/weatherpage">Weather</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/history">History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="container mt-5">
         <h1 class="mb-4">Weather App</h1>
         <form id="weatherForm" class="mb-4">
@@ -18,6 +39,7 @@
                 </div>
             </div>
         </form>
+        <% if (name) { %>
         <div id="weatherResult">
             <h2>Weather Information</h2>
             <h3>City: <%= name %></h3>
@@ -31,9 +53,9 @@
             <p>Wind Speed: <%= windSpeed %> m/s</p>
             <p>Country Code: <%= countryCode %></p>
             <p>Rain Volume (last 3 hours): <%= rainVolumeLast3Hours %> mm</p>
-            <p>Interesting point: <%= pointsOfInterest %></p>
             <p>Current dollar: <%= exchange %>KZT</p>
         </div>       
+        <% } %>     
          <div id="map"  style="height: 300px;width: 100%; border-radius: 10px; margin-top: 35px;"></div>
     </div>
     <footer class="mt-5 text-center">
