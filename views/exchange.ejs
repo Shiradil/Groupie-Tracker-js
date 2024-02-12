@@ -10,35 +10,35 @@
 <body>
     
 </body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">Weather App</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">Weather App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a href="/admin" class="nav-link">Admin page</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/weather">Weather</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/exchange-pg">Exchange</a>
-            </li>
-            <li class="nav-item">
-                <a href="/chuckNorrisJokes" class="nav-link">Random Chuck Norris Joke</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/history">History</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/logout">Logout</a>
-            </li>
-        </ul>
-    </div>
-</nav>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="/admin" class="nav-link">Admin page</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/weather">Weather</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/exchange-pg">Exchange</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/chuckNorrisJokes" class="nav-link">Random Chuck Norris Joke</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/history">History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
     <div class="container mt-5">
         <h1 class="mb-4">Exchange</h1>
@@ -67,6 +67,11 @@
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const exchangeForm = document.getElementById('exchangeForm');
         const exchangeResult = document.getElementById('exchangeResult');
