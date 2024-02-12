@@ -5,10 +5,7 @@ This website created by Astana IT Student Shirbayev Adilzhan from SE-2204 group
 This website is created to get weather data, to know dollar's exchange rate, and generate random Chuck Norris' joke. Also you can see the history of all your requests. You can autorize as an Admin (admin instructions below)
 
 ## Instructions
-1. First of all, clone repository ```git clone https://github.com/Shiradil/weatherWebsite.git```.
-2. Go to repo ```cd weatherWebsite```
-3. Run the program ```nodemon``` to the terminal
-4. Server runs on port :3000, so follow the link ```localhost:3000``` or deployed version ```https://gear-wombat.cyclic.app/```
+This website is deployed on cyclic.sh. So you cannot run this website using localhost, therefore use ```https://gear-wombat.cyclic.app/``` link to use website
 
 ### Intrsuctions to run as an admin
 1. Go to login page
