@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const User = require('../models/User');
 
 exports.getRegistrationPage = (req, res) => {
@@ -13,7 +14,9 @@ exports.handleRegistration = async (req, res) => {
             return res.status(409).send('Username already exists');
         }
 
-        const newUser = new User({ username, password });
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = new User({ username, password: hashedPassword });
         await newUser.save();
 
         res.redirect('/login?registered=true');
@@ -22,4 +25,3 @@ exports.handleRegistration = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
-

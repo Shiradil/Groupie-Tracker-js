@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles/groups.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #333;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            left: 0;
+            background-color: black;
+            opacity: 0.8;
+            padding: 0 20px;
+        }
+        nav h1{
+            max-width: 1600px;
+            padding: 20px 100px;
+            margin-right: auto;
+            margin-left: auto;
+            color: white;
+            font-size: 44px;
+            font-weight: 600;
+        }
+
+        .favorite-btn {
+            background-color: black;
+            color: white;
+            border: 1px solid white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logout-btn {
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            padding: 10px 20px;
+            border: 2px solid white;
+            border-radius: 5px;
+            margin-right: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #444;
+        }
+
+        .main {
+            background-color: #222;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+
+        .main-content {
+            margin-bottom: 20px;
+        }
+
+        .artimg {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .header-info h3 {
+            color: white;
+        }
+
+        .band-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .members-container ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .members-container ul li {
+            margin-bottom: 5px;
+        }
+
+        .location_list {
+            margin-top: 10px;
+            color: white;
+        }
+
+        .carousel-item-next,
+        .carousel-item-prev,
+        .carousel-item.active {
+            display: block;
+        }
+
+        .band-container .band-card img{
+            border-radius: 15px;
+        }
+
+        .favorite-btn {
+            background-color: black;
+            color: white;
+            border: 1px solid white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h1><a href="/groupie-tracker">Groupie-Tracker</a></h1>
+        <a href="/groupie-tracker/favorites" class="logout-btn">Favorites</a>
+        <a href="/groupie-tracker/users" class="logout-btn">Users</a>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </nav>
+<div class="main">
+    <main>
+        <div class="main-content">
+        <h2>
+            Group name: <%= group.names.en %>
+        </h2>
+        <p>Added on: <%= group.creationDate %></p>
+        <form class="d-inline" action="/add-favorites/<%= group._id %>" method="POST">
+            <button type="submit" class="favorite-btn">Add to favourites</button>
+        </form>
+        <div class="main-content">
+            <div class="band-container">
+                <div class="band-card">
+                    <div id="carousel" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <% group.images.forEach((image, index) => { %>
+                                <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                                    <img src="<%= image %>"" alt="Image <%= index + 1 %>" style="width: 240px; height: 240px;">
+                                </div>
+                            <% }); %>                           
+                        </div>
+                        <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <div class="main-content-body">
+            <div class="content-item">
+                <div class="header-info">
+                    <h3>
+                        Description:
+                    </h3>
+                </div>
+                <div class="members-container">
+                    <p><%=group.descriptions.en%></p>
+                </div>
+            </div>
+            <div class="content-item">
+                <div class="header-info">
+                    <h3>
+                        First Album:
+                    </h3>
+                </div>
+                <div class="members-container">
+                    <p><%=group.firstAlbum%></p>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $('.carousel').carousel({
+            interval: false
+        });
+    </script>
+</div>
+</body>
+</html>

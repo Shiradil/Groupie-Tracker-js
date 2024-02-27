@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles/groups.css">
+    <style>
+        body {
+            background-color: #333;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            left: 0;
+            background-color: black;
+            opacity: 0.8;
+            padding: 0 20px;
+        }
+        nav h1{
+            max-width: 1600px;
+            padding: 20px 100px;
+            margin-right: auto;
+            margin-left: auto;
+            color: white;
+            font-size: 44px;
+            font-weight: 600;
+        }
+
+        .favorite-btn {
+            background-color: black;
+            color: white;
+            border: 1px solid white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logout-btn {
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            padding: 10px 20px;
+            border: 2px solid white;
+            border-radius: 5px;
+            margin-right: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #444;
+        }
+
+        .main {
+            background-color: #222;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+
+        .main-content {
+            margin-bottom: 20px;
+        }
+
+        .artimg {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .header-info h3 {
+            color: white;
+        }
+
+        .members-container ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .members-container ul li {
+            margin-bottom: 5px;
+        }
+
+        .location_list {
+            margin-top: 10px;
+            color: white;
+        }
+
+        .favorite-btn {
+            background-color: black;
+            color: white;
+            border: 1px solid white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <h1><a href="/groupie-tracker">Groupie-Tracker</a></h1>
+            <a href="/groupie-tracker/favorites" class="logout-btn">Favorites</a>
+            <a href="/groupie-tracker/users" class="logout-btn">Users</a>
+            <a href="/logout" class="logout-btn">Logout</a>
+        </nav>
+    </header>
+    <div class="main">
+    <main>
+        <div class="main-content">
+        <h1>
+            <%= artists.name %>
+        </h1>
+        <form class="d-inline" action="/add-to-favorites/<%= artists.name %>" method="POST">
+            <button type="submit" class="favorite-btn">Add to favourites</button>
+        </form>
+        <p>Creation date: <%= artists.creationDate %></p>
+        <div class="main-content">
+            <img class="artimg" src="<%= artists.image %>"  alt="<%= artists.name %>">
+            <div class="info">
+                <p>First album release date: <strong><%= artists.firstAlbum %></strong> </p> 
+            </div>
+        </div>
+        <div class="main-content-body">
+            <div class="content-item">
+                <div class="header-info">
+                    <h3>
+                        Members
+                    </h3>
+                </div>
+                <div class="members-container">
+                    <ul>
+                        <% for (let i = 0; i < artists.members.length; i++) { %>
+                                <li><%= artists.members[i] %></li>
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

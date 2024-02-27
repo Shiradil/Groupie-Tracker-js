@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const User = require('../models/User');
 
 exports.getLoginPage = (req, res) => {
@@ -8,14 +9,20 @@ exports.handleLogin = async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const user = await User.findOne({ username, password });
+        const user = await User.findOne({ username });
 
         if (user) {
-            req.session.user = { _id: user._id, username: username, isAdmin: user.isAdmin };
-            if (user.isAdmin) {
-                res.redirect('/admin')
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+
+            if (isPasswordValid) {
+                req.session.user = { _id: user._id, username: username, isAdmin: user.isAdmin };
+                if (user.isAdmin) {
+                    res.redirect('/admin')
+                } else {
+                    res.redirect('/groupie-tracker');
+                }
             } else {
-                res.redirect('/weather');
+                res.render('login', { error: 'Invalid username or password' });
             }
         } else {
             res.render('login', { error: 'Invalid username or password' });

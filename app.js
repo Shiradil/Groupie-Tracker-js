@@ -2,19 +2,20 @@ const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const app = express();
-const WeatherData = require('./models/WeatherData');
-const ExchangeData = require('./models/ExchangeData');
-const User = require('./models/User');
-const crypto = require('crypto')
-const { getWeather, getPointsOfInterest, getExchangeRates, getChuckNorrisJoke } = require("./apidata");
 const port = 3000;
+
+const User = require('./models/User');
+const Group = require('./models/Group');
+
+const crypto = require('crypto')
 
 const dbConnection = require('./db/dbconnection');
 
 const loginHandler = require('./handlers/loginHandler');
 const registerHandler = require('./handlers/registerHandler');
-const JokeData = require('./models/ChuckNoriesJokes');
 const addUserHandler = require('./handlers/addUserHandler')
+
+const apidata = require('./apidata')
 
 const secretKey = crypto.randomBytes(64).toString('hex');
 app.use(session({
@@ -32,179 +33,97 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-app.get('/weather', (req, res) => {
-    if (req.session.user) {
-        res.render('weather', {
-            name: null,
-            coordinates: null
-        });
-    } else {
-        res.redirect('/login');
-    }
-});
-
-app.get("/weatherpage", async (req, res) => {
-    if (req.session.user) {
-        try {
-            const city = req.query.city || "Astana";
-            const [weatherData, poiData, exchangeRates] = await Promise.all([
-                getWeather(city),
-                getPointsOfInterest(city),
-                getExchangeRates()
-            ]);
-            
-            const weatherEntry = new WeatherData({
-                user: req.session.user._id,
-                name: weatherData.name,
-                temperature: weatherData.main.temp,
-                description: weatherData.weather[0].description,
-                icon: weatherData.weather[0].icon,
-                coordinates: {
-                    latitude: weatherData.coord.lat,
-                    longitude: weatherData.coord.lon
-                },
-                feelsLike: weatherData.main.feels_like,
-                humidity: weatherData.main.humidity,
-                pressure: weatherData.main.pressure,
-                windSpeed: weatherData.wind.speed,
-                countryCode: weatherData.sys.country,
-                rainVolumeLast3Hours: weatherData.rain ? weatherData.rain["3h"] : 0,
-                exchange: exchangeRates.conversion_rates.KZT,
-            });
-
-            await weatherEntry.save();
-
-            res.render('weather', {
-                user: req.session.user._id,
-                name: weatherData.name,
-                temperature: weatherData.main.temp,
-                description: weatherData.weather[0].description,
-                icon: weatherData.weather[0].icon,
-                coordinates: {
-                    latitude: weatherData.coord.lat,
-                    longitude: weatherData.coord.lon
-                },
-                feelsLike: weatherData.main.feels_like,
-                humidity: weatherData.main.humidity,
-                pressure: weatherData.main.pressure,
-                windSpeed: weatherData.wind.speed,
-                countryCode: weatherData.sys.country,
-                rainVolumeLast3Hours: weatherData.rain ? weatherData.rain["3h"] : 0,
-                exchange: exchangeRates.conversion_rates.KZT,
-            });
-        } catch (error) {
-            console.error(error);
-            res.status(500).send("Error fetching weather data");
-        }
-    } else {
-        res.redirect('/login');
-    }
-});
-
-
-app.get('/exchange-pg', (req, res) => {
-    if (req.session.user) {
-        res.render('exchange', {
-            rate: null,
-            baseCurrency: null
-        });
-    } else {
-        res.redirect('/login');
-    }
-});
-
-app.get('/chuckNorrisJokes', (req, res) => {
-    if (req.session.user) {
-        res.render('jokes', {
-            joke: null
-        });
-    } else {
-        res.redirect('/login');
-    }
-});
-
-app.get('/getChuckNorrisJoke', async (req, res) => {
-    if (req.session.user) {
-        const [chuckNorrisJokes] = await Promise.all([
-            getChuckNorrisJoke()
-        ]);
-        try {
-            const response = new JokeData({
-                user: req.session.user._id, 
-                joke: chuckNorrisJokes.value
-            });
-            await response.save();
-
-            res.render('jokes', response)
-        } catch (error) {
-            console.error('Error fetching Chuck Norris joke:', error);
-            res.status(500).json({ error: 'Error fetching Chuck Norris joke' });
-        }                                                                               
-    } else {
-        res.redirect('/login');
-    }
-});
-
-app.get('/exchange', async (req, res) => {
-    if (req.session.user) {
-
-        const { base, target } = req.query;
-        const [exchangeRates] = await Promise.all([
-            getExchangeRates()
-        ]);
-        let rate = ""
-        try {
-            if (target == "EUR") {
-                rate = exchangeRates.conversion_rates.EUR
-            } else if (target == "RUB") {
-                rate = exchangeRates.conversion_rates.RUB
-            } else if (target == "KZT") {
-                rate = exchangeRates.conversion_rates.KZT
-            } 
-
-            const exchangeEntry = new ExchangeData({
-                user: req.session.user._id, 
-                baseCurrency: base,
-                targetCurrency: target,
-                rate: rate
-            });
-            await exchangeEntry.save();
-
-            res.render('exchange', { baseCurrency: base, targetCurrency: target, rate: rate });
-        } catch (error) {
-            console.error('Error fetching exchange rate:', error);
-            res.status(500).send('Error fetching exchange rate.');
-        }
-    } else {
-        res.redirect('/login');
-    }
-});
-
-app.get('/history', async (req, res) => {
-    if (req.session.user) {
-        try {
-            const userWeatherData = await WeatherData.find({ user: req.session.user._id });
-            const userExchangeData = await ExchangeData.find({ user: req.session.user._id });
-            const userJokesData = await JokeData.find({ user: req.session.user._id });
-
-            res.render('history', { userWeatherData, userExchangeData, userJokesData });
-        } catch (error) {
-            console.error(error);
-            res.status(500).send("Error fetching weather history");
-        }
-    } else {
-        res.redirect('/login');
-    }
-});
-
-app.get("/coordinates", async (req, res) => {
+app.get('/groupie-tracker', async (req, res) => {
     try {
-        const city = req.query.city || "Astana";
-        const coordinates = await getCoordinates(city);
-        res.json({ coordinates });
+        const artists = await apidata.GetAllArtists();
+        const groups = await Group.find({});
+        console.log(groups._id)
+
+        if (req.session.user) {
+            res.render('groups', { artists, groups }); 
+        } else {
+            res.redirect('/login');
+        }
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Error fetching coordinates" });
+        console.error('Error fetching artists:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/groupie-tracker/artists/:id', async (req, res) => {
+    const id = req.params.id;
+    try {
+        const artists = await apidata.GetArtistByID(id);
+        const relation = await apidata.GetRelationByID(id);
+        const locations = await apidata.GetLocationByID(id);
+
+        if (req.session.user) {
+            const data = { artists, relation, locations };
+            res.render('artist', data);
+        } else {
+            res.redirect('/login');
+        }
+    } catch (error) {
+        console.error('Error fetching artists:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/groupie-tracker/groups/:id', async (req, res) => {
+    const id = req.params.id;
+    try {
+        const group = await Group.findById(id);
+
+        if (req.session.user) {
+            const data = { group };
+            res.render('group', data); 
+        } else {
+            res.redirect('/login');
+        }
+    } catch (error) {
+        console.error('Error fetching group:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/groupie-tracker/favorites', async (req, res) => {
+    try {
+        const userId = req.session.user._id; 
+
+        const user = await User.findById(userId).populate('favoriteGroups').exec();
+
+        if (!user) {
+            return res.status(404).send('Пользователь не найден');
+        }
+
+        res.render('favorites', { user });
+    } catch (error) {
+        console.error('Ошибка при загрузке избранных:', error);
+        res.status(500).send('Внутренняя ошибка сервера');
+    }
+});
+
+app.get('/groupie-tracker/users', async (req, res) => {
+    try {
+        const users = await User.find();
+        res.render('users', { users });
+    } catch (error) {
+        console.error('Ошибка при загрузке пользователей:', error);
+        res.status(500).send('Внутренняя ошибка сервера');
+    }
+});
+
+app.get('/groupie-tracker/users/:userId/favorites', async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        const user = await User.findById(userId).populate('favoriteGroups').exec();
+        if (!user) {
+            return res.status(404).send('Пользователь не найден');
+        }
+        res.render('favorites', { user });
+    } catch (error) {
+        console.error('Ошибка при загрузке избранных элементов пользователя:', error);
+        res.status(500).send('Внутренняя ошибка сервера');
     }
 });
 
@@ -219,17 +138,72 @@ app.get('/logout', (req, res) => {
     });
 });
 
+app.post('/add-favorites/:groupId', async (req, res) => {
+    try {
+        const userId = req.session.user._id;
+        const groupId = req.params.groupId;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send('Пользователь не найден');
+        }
+
+        const group = await Group.findById(groupId);
+        if (!group) {
+            return res.status(404).send('Артист не найден');
+        }
+
+        if (user.favoriteGroups.includes(groupId)) {
+            return res.status(400).send('Артист уже добавлен в избранные');
+        }
+
+        user.favoriteGroups.push(groupId);
+        await user.save();
+
+        res.redirect('/groupie-tracker');
+    } catch (error) {
+        console.error('Ошибка при добавлении артиста в избранные:', error);
+        res.status(500).send('Внутренняя ошибка сервера');
+    }
+});
+
+app.post('/add-to-favorites/:artistName', async (req, res) => {
+    try {
+        const userId = req.session.user._id; 
+        const artistName = req.params.artistName; 
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send('Пользователь не найден');
+        }
+
+        if (user.favoriteArtists.includes(artistName)) {
+            return res.status(400).send('Артист уже добавлен в избранные');
+        }
+
+        user.favoriteArtists.push(artistName);
+        await user.save();
+
+        res.redirect('/groupie-tracker');
+    } catch (error) {
+        console.error('Ошибка при добавлении артиста в избранные:', error);
+        res.status(500).send('Внутренняя ошибка сервера');
+    }
+});
+
+
 app.get('/admin', async (req, res) => {
     if (req.session.user && req.session.user.isAdmin) {
         try {
             const users = await User.find({});
-            res.render('admin', { users });
+            const group = await Group.find({});
+            res.render('admin', { users, group });
         } catch (error) {
             console.error(error);
-            res.status(500).send('Error fetching users');
+            res.status(500).send('Error fetching data');
         }
     } else {
-        res.redirect('/login'); 
+        res.redirect('/login');
     }
 });
 
@@ -274,7 +248,62 @@ app.post('/admin/delete/:userId', async (req, res) => {
     }
 });
 
+app.post('/admin/addGroup', async (req, res) => {
+    try {
+        const { names, descriptions, image1, image2, image3, firstAlbum } = req.body;
 
+        const images = [image1, image2, image3];
+
+        const newGroup = new Group({
+            names: {
+                en: names.en,
+                ru: names.ru
+            },
+            descriptions: {
+                en: descriptions.en,
+                ru: descriptions.ru
+            },
+            images, 
+            firstAlbum
+        });
+
+        await newGroup.save();
+
+        res.redirect('/admin');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error adding new group');
+    }
+});
+
+app.post('/admin/updateGroup/:groupId', async (req, res) => {
+    try {
+        const groupId = req.params.groupId;
+        const { names, descriptions, image, firstAlbum } = req.body;
+        await Group.findByIdAndUpdate(groupId, {
+            names,
+            descriptions,
+            image,
+            firstAlbum,
+            updationDate: Date.now()
+        });
+        res.redirect('/admin');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error updating group');
+    }
+});
+
+app.post('/admin/deleteGroup/:groupId', async (req, res) => {
+    try {
+        const groupId = req.params.groupId;
+        await Group.findByIdAndDelete(groupId);
+        res.redirect('/admin');
+    } catch (error) {
+        console.error('Error deleting group:', error);
+        res.status(500).send('Error deleting group');
+    }
+});
 
 app.get('/login', loginHandler.getLoginPage);
 app.post('/login', loginHandler.handleLogin);

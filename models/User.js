@@ -24,7 +24,15 @@ const userSchema = new mongoose.Schema({
     isAdmin: {
         type: Boolean,
         default: false
-    }
+    },
+    favoriteGroups: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Group'
+    }], 
+    favoriteArtists: [{
+        type: String,
+        ref: 'Artist'
+    }]
 });
 
 const User = mongoose.model('User', userSchema);

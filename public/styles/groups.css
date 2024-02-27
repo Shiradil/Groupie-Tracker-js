@@ -1,0 +1,89 @@
+*{
+    box-sizing: border-box;
+    margin: 0px;
+    padding:  0px;
+}
+
+
+body{
+    background-color: black;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: black;
+    opacity: 0.8;
+    padding: 0 20px;
+}
+nav h1{
+    max-width: 1600px;
+    padding: 20px 100px;
+    margin-right: auto;
+    margin-left: auto;
+    color: white;
+    font-size: 44px;
+    font-weight: 600;
+}
+
+.logout-btn {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    padding: 10px 20px;
+    border: 2px solid white;
+    border-radius: 5px;
+    margin-right: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #444;
+}
+
+main{
+
+    background-color: rgb(24, 24, 24);
+    border-radius: 7px;
+    margin-left: 10px;
+    margin-right: 10px;
+    min-height: 100vh;
+}
+
+.main-content{
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1600px;
+    padding: 50px 100px;
+}
+
+.main-content h3{
+    color: white;
+    margin-bottom: 10px;
+}
+
+.band-container {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.band-container .band-card{
+}
+
+.band-container .band-card img{
+    border-radius: 15px;
+}
+
+.band-container .band-card p{
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    margin-top: 5px;
+}
+

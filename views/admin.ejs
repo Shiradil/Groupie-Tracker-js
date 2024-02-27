@@ -18,36 +18,6 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">Weather App</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a href="/admin" class="nav-link">Admin page</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/weather">Weather</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/exchange-pg">Exchange</a>
-                </li>
-                <li class="nav-item">
-                    <a href="/chuckNorrisJokes" class="nav-link">Random Chuck Norris Joke</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/history">History</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">Logout</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
     <div class="container">
         <h1>User Management</h1>
         <ul class="list-group">
@@ -76,7 +46,43 @@
             </div>
             <button type="submit" class="btn btn-success">Add User</button>
         </form>
+        <h2>Add New Group</h2>
+        <form action="/admin/addGroup" method="POST">
+            <div class="form-group">
+                <input type="text" class="form-control" name="names[en]" placeholder="Group Name (English)">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="names[ru]" placeholder="Group Name (Russian)">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="descriptions[en]" placeholder="Description (English)">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="descriptions[ru]" placeholder="Description (Russian)">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="image1" placeholder="Image URL1">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="image2" placeholder="Image URL2">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="image3" placeholder="Image URL3">
+            </div>
+            <div class="form-group">
+                <input type="date" class="form-control" name="firstAlbum" placeholder="First Album Date">
+            </div>
+            <button type="submit" class="btn btn-success">Add Group</button>
+        </form>
     </div>
+
+    <div class="group-card">
+        <a href="/admin/groups/<%= group._id %>/edit" class="btn btn-primary">Edit</a>
+        <form class="d-inline" action="/admin/groups/<%= group._id %>/delete" method="POST">
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

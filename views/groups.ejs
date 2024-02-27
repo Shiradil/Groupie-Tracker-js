@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/groups.css">
+    <style>
+        .carousel-item-next,
+        .carousel-item-prev,
+        .carousel-item.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h1><a href="/groupie-tracker">Groupie-Tracker</a></h1>
+        <a href="/groupie-tracker/favorites" class="logout-btn">Favorites</a>
+        <a href="/groupie-tracker/users" class="logout-btn">Users</a>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </nav>
+    <main>
+        <div class="main-content">
+            <h3>We created bands</h3>
+            <div class="band-container">
+                <% for (let i = 0; i < groups.length; i++) { %>
+                    <div class="band-card">
+                        <div id="carousel<%= i %>" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <% for (let j = 0; j < groups[i].images.length; j++) { %>
+                                    <a href="/groupie-tracker/groups/<%= groups[i]._id %>">
+                                        <div class="carousel-item <%= j === 0 ? 'active' : '' %>">
+                                            <img src="<%= groups[i].images[j] %>" alt="<%= groups[i].name %>" style="width: 240px; height: 240px;">
+                                        </div>
+                                    </a>
+                                <% } %>                              
+                            </div>
+                            <a class="carousel-control-prev" href="#carousel<%= i %>" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carousel<%= i %>" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                        <p><%= groups[i].names.en %></p>
+                    </div>                
+                <% } %>
+            </div>
+
+            <h3>Bands we love</h3>
+            <div class="band-container">
+                <% for (let i = 0; i < artists.length; i++) { %>
+                    <div class="band-card">
+                        <a href="/groupie-tracker/artists/<%= artists[i].id %>" class="">
+                            <div id="carousel<%= i %>" class="carousel slide" data-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <img src="<%= artists[i].image %>" alt="<%= artists[i].name %>" style="width: 240px; height: 240px;">
+                                    </div>                               
+                                </div>
+                            </div>
+                            <p><%= artists[i].name %></p>
+                        </a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $('.carousel').carousel({
+            interval: false
+        });
+    </script>
+</body>
+</html>

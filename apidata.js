@@ -1,93 +1,126 @@
 const http = require("http");
 
-function getChuckNorrisJoke() {
-    return new Promise((resolve, reject) => {
-        const url = `https://api.chucknorris.io/jokes/random`;
+function GetAllArtists() {
+    const url = 'http://groupietrackers.herokuapp.com/api/artists';
 
-        https.get(url, (response) => {
-            let data = "";
-            response.on("data", (chunk) => {
+    return new Promise((resolve, reject) => {
+        const req = http.get(url, (res) => {
+            let data = '';
+
+            res.on('data', (chunk) => {
                 data += chunk;
             });
 
-            response.on("end", () => {
-                const jokeData = JSON.parse(data);
-                resolve(jokeData);
+            res.on('end', () => {
+                try {
+                    const artists = JSON.parse(data).map(artist => ({
+                        id: artist.id,
+                        image: artist.image,
+                        name: artist.name
+                    }));
+                    resolve(artists);
+                } catch (error) {
+                    reject('Error parsing JSON');
+                }
             });
-        }).on("error", (error) => {
-            reject(error);
         });
+
+        req.on('error', (error) => {
+            reject(`Error fetching artists: ${error.message}`);
+        });
+
+        req.end();
     });
 }
 
-function getWeather(city) {
-    return new Promise((resolve, reject) => {
-        const apiKey = "5291eefa398029c38b952d4a10671a3e";
-        const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+function GetArtistByID(id) {
+    const url = 'http://groupietrackers.herokuapp.com/api/artists' + '/' + id;
 
-        http.get(url, (response) => {
-            let data = "";
-            response.on("data", (chunk) => {
+    return new Promise((resolve, reject) => {
+        const req = http.get(url, (res) => {
+            let data = '';
+
+            res.on('data', (chunk) => {
                 data += chunk;
             });
 
-            response.on("end", () => {
-                const weatherData = JSON.parse(data);
-                resolve(weatherData);
+            res.on('end', () => {
+                try {
+                    const artists = JSON.parse(data);
+                    resolve(artists);
+                } catch (error) {
+                    reject('Error parsing JSON');
+                }
             });
-        }).on("error", (error) => {
-            reject(error);
         });
+
+        req.on('error', (error) => {
+            reject(`Error fetching artists: ${error.message}`);
+        });
+
+        req.end();
     });
 }
 
-async function getCoordinates(city) {
-    const apiKey = "5291eefa398029c38b952d4a10671a3e";
-    const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+function GetRelationByID(id) {
+    const url = 'http://groupietrackers.herokuapp.com/api/relation' + '/' + id;
 
-    const response = await fetch(url);
-    const weatherData = await response.json();
-    
-    const coordinates = {
-        latitude: weatherData.coord.lat,
-        longitude: weatherData.coord.lon
-    };
-
-    return coordinates;
-}
-
-async function getPointsOfInterest(city) {
-    const apiKey = "5ae2e3f221c38a28845f05b66938d71bb7778874086ac181360e34f7"; 
-    const url = `https://api.opentripmap.com/0.1/en/places/geoname?name=${city}&apikey=${apiKey}`;
-
-    const response = await fetch(url);
-    const poiData = await response.json();
-
-    return poiData;
-}
-
-const https = require("https");
-
-function getExchangeRates() {
     return new Promise((resolve, reject) => {
-        const url = `https://v6.exchangerate-api.com/v6/718558d545977bac404ab378/latest/USD`;
+        const req = http.get(url, (res) => {
+            let data = '';
 
-        https.get(url, (response) => {
-            let data = "";
-            response.on("data", (chunk) => {
+            res.on('data', (chunk) => {
                 data += chunk;
             });
 
-            response.on("end", () => {
-                const exchangeData = JSON.parse(data);
-                resolve(exchangeData);
+            res.on('end', () => {
+                try {
+                    const relation = JSON.parse(data);
+                    resolve(relation);
+                } catch (error) {
+                    reject('Error parsing JSON');
+                }
             });
-        }).on("error", (error) => {
-            reject(error);
         });
+
+        req.on('error', (error) => {
+            reject(`Error fetching relation: ${error.message}`);
+        });
+
+        req.end();
     });
 }
 
-module.exports = { getWeather, getCoordinates, getPointsOfInterest, getExchangeRates, getChuckNorrisJoke };
+
+function GetLocationByID(id) {
+    const url = 'http://groupietrackers.herokuapp.com/api/locations/' + id;
+
+    return new Promise((resolve, reject) => {
+        const req = http.get(url, (res) => {
+            let data = '';
+
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            res.on('end', () => {
+                try {
+                    const location = JSON.parse(data);
+                    resolve(location);
+                } catch (error) {
+                    reject('Error parsing JSON');
+                }
+            });
+        });
+
+        req.on('error', (error) => {
+            reject(`Error fetching location: ${error.message}`);
+        });
+
+        req.end();
+    });
+}
+
+module.exports = {GetAllArtists, GetArtistByID, GetRelationByID, GetLocationByID};
 
 

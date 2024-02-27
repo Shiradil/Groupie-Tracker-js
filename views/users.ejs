@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users List</title>
+    <link rel="stylesheet" href="styles/users.css">
+    <style>
+        body {
+            background-color: #333;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            left: 0;
+            background-color: black;
+            opacity: 0.8;
+            padding: 0 20px;
+        }
+        nav h1{
+            max-width: 1600px;
+            padding: 20px 100px;
+            margin-right: auto;
+            margin-left: auto;
+            color: white;
+            font-size: 44px;
+            font-weight: 600;
+        }
+
+        .main {
+            background-color: #222;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+
+        .main-content {
+            margin-bottom: 20px;
+        }
+
+        .header-info h3 {
+            color: white;
+        }
+
+        .members-container ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .members-container ul li {
+            margin-bottom: 5px;
+        }
+
+        .location_list {
+            margin-top: 10px;
+            color: white;
+        }
+
+        .favorite-btn {
+            background-color: black;
+            color: white;
+            border: 1px solid white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logout-btn {
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            padding: 10px 20px;
+            border: 2px solid white;
+            border-radius: 5px;
+            margin-right: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #444;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h1><a href="/groupie-tracker">Groupie-Tracker</a></h1>
+        <a href="/groupie-tracker/favorites" class="logout-btn">Favorites</a>
+        <a href="/groupie-tracker/users" class="logout-btn">Users</a>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </nav>
+    <div class="main">
+        <div class="main-content">
+            <h1>Users List</h1>
+            <ul>
+                <% users.forEach(user => { %>
+                    <li>
+                        <a href="/groupie-tracker/users/<%= user._id %>/favorites"><%= user.username %></a>
+                    </li>
+                <% }); %>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
