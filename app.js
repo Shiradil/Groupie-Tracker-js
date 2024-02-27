@@ -372,12 +372,9 @@ app.post('/admin/addGroup', async (req, res) => {
 app.post('/admin/updateGroup/:groupId', async (req, res) => {
     try {
         const groupId = req.params.groupId;
-        const { names, descriptions, image, firstAlbum } = req.body;
+        const { names } = req.body;
         await Group.findByIdAndUpdate(groupId, {
             names,
-            descriptions,
-            image,
-            firstAlbum,
             updationDate: Date.now()
         });
         res.redirect('/admin');
