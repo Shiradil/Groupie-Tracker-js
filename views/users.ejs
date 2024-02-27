@@ -86,11 +86,29 @@
         .logout-btn:hover {
             background-color: #444;
         }
+
+        select {
+            padding: 8px;
+            border: 1px solid #ffffff;
+            background-color: #000000;
+            color: #ffffff;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        select:hover {
+            background-color: #333333; 
+        }
     </style>
 </head>
 <body>
     <nav>
         <h1><a href="/groupie-tracker">Groupie-Tracker</a></h1>
+        <form action="/switch-language" method="POST">
+            <button type="submit" name="language" value="en">English</button>
+            <button type="submit" name="language" value="ru">Русский</button>
+        </form>  
+        <a href="/findartist" class="logout-btn">Artist's photo API</a>
         <a href="/groupie-tracker/favorites" class="logout-btn">Favorites</a>
         <a href="/groupie-tracker/users" class="logout-btn">Users</a>
         <a href="/logout" class="logout-btn">Logout</a>

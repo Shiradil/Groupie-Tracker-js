@@ -1,4 +1,6 @@
 const http = require("http");
+const https = require("https");
+
 
 function GetAllArtists() {
     const url = 'http://groupietrackers.herokuapp.com/api/artists';
@@ -121,6 +123,35 @@ function GetLocationByID(id) {
     });
 }
 
-module.exports = {GetAllArtists, GetArtistByID, GetRelationByID, GetLocationByID};
+function FindArtists(name) {
+    const url = "https://api.deezer.com/search/artist/?q=" + name
+
+    return new Promise((resolve, reject) => {
+        const req = https.get(url, (res) => {
+            let data = '';
+
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            res.on('end', () => {
+                try {
+                    const artist = JSON.parse(data);
+                    resolve(artist);
+                } catch (error) {
+                    reject('Error parsing JSON');
+                }
+            });
+        });
+
+        req.on('error', (error) => {
+            reject(`Error fetching artist: ${error.message}`);
+        });
+
+        req.end();
+    });
+}
+
+module.exports = {GetAllArtists, GetArtistByID, GetRelationByID, GetLocationByID, FindArtists};
 
 

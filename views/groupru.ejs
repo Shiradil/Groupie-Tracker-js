@@ -141,21 +141,21 @@
         <form action="/switch-language" method="POST">
             <button type="submit" name="language" value="en">English</button>
             <button type="submit" name="language" value="ru">Русский</button>
-        </form> 
-        <a href="/findartist" class="logout-btn">Artist's photo API</a>
-        <a href="/groupie-tracker/favorites" class="logout-btn">Favorites</a>
-        <a href="/groupie-tracker/users" class="logout-btn">Users</a>
-        <a href="/logout" class="logout-btn">Logout</a>
+        </form>  
+        <a href="/findartist" class="logout-btn">Фото артиста API</a>
+        <a href="/groupie-tracker/favorites" class="logout-btn">Избранное</a>
+        <a href="/groupie-tracker/users" class="logout-btn">Пользователи</a>
+        <a href="/logout" class="logout-btn">Выйти</a>
     </nav>
 <div class="main">
     <main>
         <div class="main-content">
         <h2>
-            Group name: <%= group.names.en %>
+            Название группы: <%= group.names.ru %>
         </h2>
-        <p>Added on: <%= group.creationDate %></p>
+        <p>Дата добавления: <%= group.creationDate %></p>
         <form class="d-inline" action="/add-favorites/<%= group._id %>" method="POST">
-            <button type="submit" class="favorite-btn">Add to favourites</button>
+            <button type="submit" class="favorite-btn">Добавить в избранное</button>
         </form>
         <div class="main-content">
             <div class="band-container">
@@ -184,17 +184,17 @@
             <div class="content-item">
                 <div class="header-info">
                     <h3>
-                        Description:
+                        Описание:
                     </h3>
                 </div>
                 <div class="members-container">
-                    <p><%=group.descriptions.en%></p>
+                    <p><%= group.descriptions.ru %></p>
                 </div>
             </div>
             <div class="content-item">
                 <div class="header-info">
                     <h3>
-                        First Album:
+                        Первый альбом:
                     </h3>
                 </div>
                 <div class="members-container">

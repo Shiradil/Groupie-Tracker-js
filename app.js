@@ -37,10 +37,13 @@ app.get('/groupie-tracker', async (req, res) => {
     try {
         const artists = await apidata.GetAllArtists();
         const groups = await Group.find({});
-        console.log(groups._id)
 
         if (req.session.user) {
-            res.render('groups', { artists, groups }); 
+            if (req.session.user.language === "en") {
+                res.render('groups', { artists, groups }); 
+            } else {
+                res.render('groupsru', { artists, groups })
+            }
         } else {
             res.redirect('/login');
         }
@@ -59,7 +62,11 @@ app.get('/groupie-tracker/artists/:id', async (req, res) => {
 
         if (req.session.user) {
             const data = { artists, relation, locations };
-            res.render('artist', data);
+            if (req.session.user.language === "en") {
+                res.render('artist', { artists }); 
+            } else {
+                res.render('artistru', { artists })
+            }
         } else {
             res.redirect('/login');
         }
@@ -76,7 +83,11 @@ app.get('/groupie-tracker/groups/:id', async (req, res) => {
 
         if (req.session.user) {
             const data = { group };
-            res.render('group', data); 
+            if (req.session.user.language === "en") {
+                res.render('group', { data }); 
+            } else {
+                res.render('groupru', { data })
+            }
         } else {
             res.redirect('/login');
         }
@@ -96,7 +107,11 @@ app.get('/groupie-tracker/favorites', async (req, res) => {
             return res.status(404).send('Пользователь не найден');
         }
 
-        res.render('favorites', { user });
+        if (req.session.user.language === "en") {
+            res.render('favorites', { user }); 
+        } else {
+            res.render('favoritesru', { user })
+        }
     } catch (error) {
         console.error('Ошибка при загрузке избранных:', error);
         res.status(500).send('Внутренняя ошибка сервера');
@@ -106,7 +121,11 @@ app.get('/groupie-tracker/favorites', async (req, res) => {
 app.get('/groupie-tracker/users', async (req, res) => {
     try {
         const users = await User.find();
-        res.render('users', { users });
+        if (req.session.user.language === "en") {
+            res.render('users', { users });
+        } else {
+            res.render('usersru', { users })
+        }
     } catch (error) {
         console.error('Ошибка при загрузке пользователей:', error);
         res.status(500).send('Внутренняя ошибка сервера');
@@ -120,13 +139,87 @@ app.get('/groupie-tracker/users/:userId/favorites', async (req, res) => {
         if (!user) {
             return res.status(404).send('Пользователь не найден');
         }
-        res.render('favorites', { user });
+        if (req.session.user.language === "en") {
+            res.render('favorites', { user });
+        } else {
+            res.render('favoritesru', { user })
+        }
     } catch (error) {
         console.error('Ошибка при загрузке избранных элементов пользователя:', error);
         res.status(500).send('Внутренняя ошибка сервера');
     }
 });
 
+app.post('/switch-language', async (req, res) => {
+    try {
+        const { language } = req.body; 
+
+        const userId = req.session.user._id;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        user.language = language;
+        await user.save();
+
+        req.session.user.language = language;
+
+        const referer = req.header('Referer') || '/';
+        res.redirect(referer);
+    } catch (error) {
+        console.error('Error switching language:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/findartist', async (req, res) => {
+    try {
+        if (req.session.user) {
+            if (req.session.user.language === "en") {
+                res.render('findartist', {data: null}); 
+            } else {
+                res.render('findartistru', {data: null})
+            }
+        } else {
+            res.redirect('/login');
+        }
+    } catch (error) {
+        console.error('Error switching language:', error);
+        res.status(500).send('Internal Server Error');
+    }
+    
+});
+
+app.post('/find-artist', async (req, res) => {
+    try {
+        const artistName = req.body.artistName.trim();
+
+        if (!artistName) {
+            return res.status(400).send('Please enter an artist name');
+        }
+
+        const artist = await apidata.FindArtists(artistName);
+
+        if (!artist) {
+            return res.status(404).send('Artist not found');
+        }
+
+        if (req.session.user) {
+            if (req.session.user.language === "en") {
+                res.render('findartist', { artist, data: "1" }); 
+            } else {
+                res.render('findartistru', { artist, data: "1" });
+            }
+        } else {
+            res.redirect('/login');
+        }
+    } catch (error) {
+        console.error('Error finding artist:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 app.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {

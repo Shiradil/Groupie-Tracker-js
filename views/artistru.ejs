@@ -126,11 +126,11 @@
             <form action="/switch-language" method="POST">
                 <button type="submit" name="language" value="en">English</button>
                 <button type="submit" name="language" value="ru">Русский</button>
-            </form> 
-            <a href="/findartist" class="logout-btn">Artist's photo API</a>
-            <a href="/groupie-tracker/favorites" class="logout-btn">Favorites</a>
-            <a href="/groupie-tracker/users" class="logout-btn">Users</a>
-            <a href="/logout" class="logout-btn">Logout</a>
+            </form>  
+            <a href="/findartist" class="logout-btn">Фото артиста API</a>
+            <a href="/groupie-tracker/favorites" class="logout-btn">Избранное</a>
+            <a href="/groupie-tracker/users" class="logout-btn">Пользователи</a>
+            <a href="/logout" class="logout-btn">Выйти</a>
         </nav>
     </header>
     <div class="main">
@@ -140,20 +140,20 @@
             <%= artists.name %>
         </h1>
         <form class="d-inline" action="/add-to-favorites/<%= artists.name %>" method="POST">
-            <button type="submit" class="favorite-btn">Add to favourites</button>
+            <button type="submit" class="favorite-btn">Добавить в избранное</button>
         </form>
-        <p>Creation date: <%= artists.creationDate %></p>
+        <p>Дата создания: <%= artists.creationDate %></p>
         <div class="main-content">
             <img class="artimg" src="<%= artists.image %>"  alt="<%= artists.name %>">
             <div class="info">
-                <p>First album release date: <strong><%= artists.firstAlbum %></strong> </p> 
+                <p>Дата выхода первого альбома: <strong><%= artists.firstAlbum %></strong> </p> 
             </div>
         </div>
         <div class="main-content-body">
             <div class="content-item">
                 <div class="header-info">
                     <h3>
-                        Members
+                        Участники
                     </h3>
                 </div>
                 <div class="members-container">

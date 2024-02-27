@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,15 +33,15 @@
         <form action="/switch-language" method="POST">
             <button type="submit" name="language" value="en">English</button>
             <button type="submit" name="language" value="ru">Русский</button>
-        </form> 
-        <a href="/findartist" class="logout-btn">Artist's photo API</a>
-        <a href="/groupie-tracker/favorites" class="logout-btn">Favorites</a>
-        <a href="/groupie-tracker/users" class="logout-btn">Users</a>
-        <a href="/logout" class="logout-btn">Logout</a>
+        </form>  
+        <a href="/findartist" class="logout-btn">Фото артиста API</a>
+        <a href="/groupie-tracker/favorites" class="logout-btn">Избранное</a>
+        <a href="/groupie-tracker/users" class="logout-btn">Пользователи</a>
+        <a href="/logout" class="logout-btn">Выйти</a>
     </nav>
     <main>
         <div class="main-content">
-            <h3>We created bands</h3>
+            <h3>Созданные нами группы</h3>
             <div class="band-container">
                 <% for (let i = 0; i < groups.length; i++) { %>
                     <div class="band-card">
@@ -64,12 +64,12 @@
                                 <span class="sr-only">Next</span>
                             </a>
                         </div>
-                        <p><%= groups[i].names.en %></p>
+                        <p><%= groups[i].names.ru %></p>
                     </div>                
                 <% } %>
             </div>
 
-            <h3>Bands we love</h3>
+            <h3>Группы которые мы любим</h3>
             <div class="band-container">
                 <% for (let i = 0; i < artists.length; i++) { %>
                     <div class="band-card">

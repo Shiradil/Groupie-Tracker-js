@@ -32,7 +32,11 @@ const userSchema = new mongoose.Schema({
     favoriteArtists: [{
         type: String,
         ref: 'Artist'
-    }]
+    }],
+    language: {
+        type: String,
+        default: "en"
+    }
 });
 
 const User = mongoose.model('User', userSchema);

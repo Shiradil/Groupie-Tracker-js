@@ -2,10 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styles/groups.css">
+    <title>Find Artist Photo</title>
     <style>
         body {
             background-color: #333;
@@ -81,6 +79,12 @@
             color: white;
         }
 
+        .band-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
         .members-container ul {
             list-style: none;
             padding: 0;
@@ -93,6 +97,16 @@
         .location_list {
             margin-top: 10px;
             color: white;
+        }
+
+        .carousel-item-next,
+        .carousel-item-prev,
+        .carousel-item.active {
+            display: block;
+        }
+
+        .band-container .band-card img{
+            border-radius: 15px;
         }
 
         .favorite-btn {
@@ -116,57 +130,35 @@
         select:hover {
             background-color: #333333; 
         }
-
     </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <h1><a href="/groupie-tracker">Groupie-Tracker</a></h1>
-            <form action="/switch-language" method="POST">
-                <button type="submit" name="language" value="en">English</button>
-                <button type="submit" name="language" value="ru">Русский</button>
-            </form> 
-            <a href="/findartist" class="logout-btn">Artist's photo API</a>
-            <a href="/groupie-tracker/favorites" class="logout-btn">Favorites</a>
-            <a href="/groupie-tracker/users" class="logout-btn">Users</a>
-            <a href="/logout" class="logout-btn">Logout</a>
-        </nav>
-    </header>
+    <nav>
+        <h1><a href="/groupie-tracker">Groupie-Tracker</a></h1>
+        <form action="/switch-language" method="POST">
+            <button type="submit" name="language" value="en">English</button>
+            <button type="submit" name="language" value="ru">Русский</button>
+        </form>  
+        <a href="/findartist" class="logout-btn">Фото артиста API</a>
+        <a href="/groupie-tracker/favorites" class="logout-btn">Избранное</a>
+        <a href="/groupie-tracker/users" class="logout-btn">Пользователи</a>
+        <a href="/logout" class="logout-btn">Выйти</a>
+    </nav>
     <div class="main">
-    <main>
         <div class="main-content">
-        <h1>
-            <%= artists.name %>
-        </h1>
-        <form class="d-inline" action="/add-to-favorites/<%= artists.name %>" method="POST">
-            <button type="submit" class="favorite-btn">Add to favourites</button>
-        </form>
-        <p>Creation date: <%= artists.creationDate %></p>
-        <div class="main-content">
-            <img class="artimg" src="<%= artists.image %>"  alt="<%= artists.name %>">
-            <div class="info">
-                <p>First album release date: <strong><%= artists.firstAlbum %></strong> </p> 
+            <div class="container">
+                <h1>Find Artist Photo</h1>
+                <form action="/find-artist" method="POST">
+                    <input type="text" name="artistName" placeholder="Enter artist name">
+                    <button type="submit">Search</button>
+                </form>
+                <% if (data) { %>
+                    <% if (artist.data[0].picture_medium) { %>
+                        <img src="<%= artist.data[0].picture_medium %>" alt="Artist Photo">
+                    <% } %>
+                <% } %>
             </div>
         </div>
-        <div class="main-content-body">
-            <div class="content-item">
-                <div class="header-info">
-                    <h3>
-                        Members
-                    </h3>
-                </div>
-                <div class="members-container">
-                    <ul>
-                        <% for (let i = 0; i < artists.members.length; i++) { %>
-                                <li><%= artists.members[i] %></li>
-                        <% } %>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        </div>
-    </main>
-</div>
+    </div>
 </body>
 </html>

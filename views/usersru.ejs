@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Favorites</title>
-    <link rel="stylesheet" href="styles/groups.css">
+    <title>Users List</title>
+    <link rel="stylesheet" href="styles/users.css">
     <style>
         body {
             background-color: #333;
@@ -107,26 +107,20 @@
         <form action="/switch-language" method="POST">
             <button type="submit" name="language" value="en">English</button>
             <button type="submit" name="language" value="ru">Русский</button>
-        </form> 
-        <a href="/findartist" class="logout-btn">Artist's photo API</a>
-        <a href="/groupie-tracker/favorites" class="logout-btn">Favorites</a>
-        <a href="/groupie-tracker/users" class="logout-btn">Users</a>
-        <a href="/logout" class="logout-btn">Logout</a>
+        </form>  
+        <a href="/findartist" class="logout-btn">Фото артиста API</a>
+        <a href="/groupie-tracker/favorites" class="logout-btn">Избранное</a>
+        <a href="/groupie-tracker/users" class="logout-btn">Пользователи</a>
+        <a href="/logout" class="logout-btn">Выйти</a>
     </nav>
     <div class="main">
         <div class="main-content">
-            <h1>Favorites</h1>
-            <h2>User: <%= user.username %></h2>
-            <h2>Favorite groups:</h2>
+            <h1>Список пользователей</h1>
             <ul>
-                <% user.favoriteGroups.forEach(group => { %>
-                    <li><%= group.names.en %></li> 
-                <% }); %>
-            </ul>
-            <h2>Favorite artists:</h2>
-            <ul>
-                <% user.favoriteArtists.forEach(artist => { %>
-                    <li><%= artist %></li> 
+                <% users.forEach(user => { %>
+                    <li>
+                        <a href="/groupie-tracker/users/<%= user._id %>/favorites"><%= user.username %></a>
+                    </li>
                 <% }); %>
             </ul>
         </div>
