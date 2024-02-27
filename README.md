@@ -5,7 +5,7 @@ This website created by Astana IT Student Shirbayev Adilzhan from SE-2204 group
 This website created track groups and add it to your favorites list. You can see every user's favorite list on Users page. Also you can search an image of any artist on Find Photo page.
 
 ## Instructions
-1. First of all, clone repository ```git clone https://github.com/Shiradil/Groupie-Tracker-js.git``.
+1. First of all, clone repository ```git clone https://github.com/Shiradil/Groupie-Tracker-js.git```.
 2. Go to repo ```cd Groupie-Tracker-js```
 3. Run the program ```nodemon``` to the terminal
 4. Server runs on port :3000, so follow the link ```localhost:3000``` or deployed version ```https://joyous-sweatpants-dog.cyclic.app/```
