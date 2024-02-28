@@ -82,11 +82,10 @@ app.get('/groupie-tracker/groups/:id', async (req, res) => {
         const group = await Group.findById(id);
 
         if (req.session.user) {
-            const data = { group };
             if (req.session.user.language === "en") {
-                res.render('group', { data }); 
+                res.render('group', { group }); 
             } else {
-                res.render('groupru', { data })
+                res.render('groupru', { group })
             }
         } else {
             res.redirect('/login');
